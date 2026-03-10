@@ -192,7 +192,7 @@ It is recommended that a container monitoring tool be available to watch the log
     - [5.7.1. DGX Spark support](#571-dgx-spark-support)
     - [5.7.2. Blackwell support](#572-blackwell-support)
     - [5.7.3. Specifying alternate folder location (ex: --output\_directory) with BASE\_DIRECTORY](#573-specifying-alternate-folder-location-ex---output_directory-with-base_directory)
-    - [5.7.4. run/pip\_cache and run/tmp](#574-runpip_cache-and-runtmp)
+    - [5.7.4. run/pip\_cache, run/uv\_cache and run/tmp](#574-runpip_cache-runuv_cache-and-runtmp)
     - [5.7.5. Direct Cloud deployment: GPU Trader](#575-direct-cloud-deployment-gpu-trader)
     - [5.7.6. Stability Matrix Integration](#576-stability-matrix-integration)
     - [5.7.7. LoRA Manager Integration](#577-lora-manager-integration)
@@ -321,6 +321,8 @@ To run the container on an NVIDIA GPU, mount the specified directory, expose onl
 mkdir run basedir
 podman run --rm -it --userns=keep-id --device nvidia.com/gpu=all -v `pwd`/run:/comfy/mnt -v `pwd`/basedir:/basedir -e WANTED_UID=`id -u` -e WANTED_GID=`id -g` -e BASE_DIRECTORY=/basedir -e SECURITY_LEVEL=normal -p 127.0.0.1:8188:8188 --name comfyui-nvidia docker.io/mmartial/comfyui-nvidia-docker:latest
 ```
+
+If your system has SELinux, you may need to add `:Z` to the various bind mounts (`-v`) in the `podman run` command. For more details, please see [https://github.com/containers/podman/issues/3415](https://github.com/containers/podman/issues/3415).
 
 ### 2.2.2. podman compose up
 
@@ -857,7 +859,7 @@ For Unraid users, those steps can done by editing the template from the `Docker`
 1. add a new `Path` entry (name it `output directory`) with a `Container Path` with value `/output`, a `Host Path` with your selected lcoation, for example `/preferredlocation/output`, and an `Access Mode` of `Read/Write`.
 2. edit the existing `COMFY_CMDLINE_EXTRA` variable to add the `--output-directory /output` option.
 
-### 5.7.4. run/pip_cache and run/tmp
+### 5.7.4. run/pip_cache, run/uv_cache and run/tmp
 
 If the `run/pip_cache` and `run/tmp` folders are present, they will be used as the cache folder for pip and the temporary directory for the comfy user. They should be created in the `run` folder before running the container starts with the user with the `WANTED_UID` and `WANTED_GID`.
 
@@ -869,8 +871,9 @@ mkdir -p run basedir run/pip_cache run/tmp
 If used, various `pip install` commands will write content to those folders (mounted as part of `run`) instead of within the container.
 This can be useful to avoid using the container's `writeable` layers, which might be limited in size on Unraid systems.
 
-Those are temporary folders, and can be deleted when the container is stopped.
+The `run/uv_cache` folder is automatically created when using `USE_UV=true`.
 
+Those are temporary folders, and can be deleted when the container is stopped.
 
 ### 5.7.5. Direct Cloud deployment: GPU Trader
 
