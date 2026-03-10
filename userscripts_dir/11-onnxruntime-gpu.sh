@@ -12,9 +12,9 @@
 FORCE_REINSTALL="${FORCE_REINSTALL:-false}"
 # ---------------------
 
-# Wiping both means we must reinstall one, so keep GPU by default
+# Building it from source takes a long time: try not to delete it if that is your goal
+# ONLY set to true if you built from source (ie no wheel available --there are some for x86_64)
 ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT="${ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT:-false}"
-# building it is very slow, so try not to delete it if possible
 
 # --- COLOR CODES (for console)---
 LOG_ERR=$(printf '\033[0;41m') # White on RED BG
