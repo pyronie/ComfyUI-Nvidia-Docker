@@ -119,8 +119,8 @@ If this version is incompatible with your container runtime, please see the list
 | ubuntu24_cuda12.6-latest | `latest` | `latest` as of `20250413` release |
 | ubuntu24_cuda12.8-latest | | minimum required for Blackwell (inc RTX 50xx) hardware (see "Blackwell support" section) |
 | ubuntu24_cuda12.9-latest | | |
-| ubuntu24_cuda13.0-latest | | a DGX Spark version can be built using `make build-dgx` |
-| ubuntu24_cuda13.1-latest | | untested |
+| ubuntu24_cuda13.0-latest | | |
+| ubuntu24_cuda13.1-latest | | a DGX Spark version can be built using `make build-dgx` |
 
 For more details on driver capabilities and how to update those, please see [Setting up NVIDIA docker & podman (Ubuntu 24.04)](https://www.gkr.one/blg-20240523-u24-nvidia-docker-podman).
 
@@ -803,7 +803,7 @@ See [extras/FAQ.md] for additional FAQ topics, among which:
 ### 5.7.1. DGX Spark support
 
 The DGX Spark is an ARM64 based GPU, and as such, it requires a different image to be used.
-The base `FROM` comes from nvcr.io as such each end user will need to build their own image on their DGX Spark.
+The base `FROM` is different from x86_64. For the time being, end users will need to build their own image on their DGX Spark.
 
 Needed: `git`, `make`, `docker`.
 
@@ -826,7 +826,13 @@ The local image name will something like `comfyui-nvidia-docker:ubuntu24_cuda13.
 Use this value in the `image:` section of the `docker-compose.yml` file; ie it should read: `image: comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`.
 Similaryly, if starting the container with `docker run`, it should read: `docker run ... comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`.
 
+Please check [extras/dgx_spark-helper.sh](extras/dgx_spark-helper.sh) and [compose-dgx_spark.yml](compose-dgx_spark.yml) for example usage.
+
 ### 5.7.2. Blackwell support
+
+It is recommended to compile SageAttention3 (see [userscripts_dir/21-SageAttention3-BlackwellOnly.sh](userscripts_dir/21-SageAttention3-BlackwellOnly.sh)).
+
+If using `nvfp4` models, make sure to install [`comfy_kitchen`](https://github.com/Comfy-Org/comfy-kitchen) as well as the [ComfyUI_Kitchen_nvfp4_Converter](https://github.com/tritant/ComfyUI_Kitchen_nvfp4_Converter) custom node. I have succesfully used it to convert multiple CivitAI `fp16` models to `nvfp4` with no issues.
 
 To use the Blackwell GPU (RTX 5080/5090), you will need to make sure to install NVIDIA driver 570 or above. This driver brings support for the RTX 50xx series of GPUs and CUDA 12.8. 
 
