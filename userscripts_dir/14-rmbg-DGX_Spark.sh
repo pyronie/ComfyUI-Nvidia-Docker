@@ -41,25 +41,29 @@ error_exit() {
 
 source /comfy/mnt/venv/bin/activate || error_exit "Failed to activate virtualenv"
 
-# --- CHECK EXISTING INSTALLATION ---
-if [ "$FORCE_REINSTALL" = "false" ]; then
-    if pip show decord > /dev/null 2>&1; then
-        echo "${LOG_INFO}INFO:${NC} decord is already installed."
-        echo "     (Set FORCE_REINSTALL=true in script to force rebuild/reinstall)"
-        exit 0
-    fi
-else
-    echo "${LOG_INFO}INFO:${NC} FORCE_REINSTALL is true. Proceeding..."
-fi
-# -----------------------------------
-
-echo "** Installing decord on Arm64 (DGX10) **"
-
 # Confirm we are on arm64
 if [ "$(uname -m)" != "aarch64" ]; then
     echo   "${LOG_WARN}WARNING:${NC} This script is for arm64 only, exiting"
     exit 0
 fi
+
+to_install="decord2 pycocotools"
+
+# --- CHECK EXISTING INSTALLATION ---
+if [ "$FORCE_REINSTALL" = "false" ]; then
+    for i in $to_install; do
+        if pip show $i > /dev/null 2>&1; then
+            echo "${LOG_INFO}INFO:${NC} $i is already installed."
+            echo "     (Set FORCE_REINSTALL=true in script to force rebuild/reinstall)"
+            to_install="${to_install/ $i}"
+        fi
+    done
+else
+    echo "${LOG_INFO}INFO:${NC} FORCE_REINSTALL is true. Proceeding..."
+fi
+# -----------------------------------
+
+echo "** Installing RMBG components on Arm64 (DGX10) **"
 
 # We need both uv and the cache directory to enable build with uv
 use_uv=true
@@ -78,8 +82,9 @@ else
   echo " - TORCH_INDEX_URL: $TORCH_INDEX_URL"
 fi
 
-CMD="${PIP3_CMD} decord2 ${PIP3_XTRA}"
+CMD="${PIP3_CMD} ${to_install} ${PIP3_XTRA}"
 echo "CMD: \"${CMD}\""
-${CMD} || error_exit "Failed to install decord"
-echo "${LOG_OK}SUCCESS:${NC} decord installed successfully"
+${CMD} || error_exit "Failed to install RMBG components"
+echo "${LOG_OK}SUCCESS:${NC} RMBG components installed successfully"
 exit 0
+
