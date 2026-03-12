@@ -150,8 +150,9 @@ if [ "A$must_build" == "Atrue" ]; then
     fi
 
     if [ "$ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT" = "true" ]; then
-        echo "${LOG_WARN}Not downloading from git, using existing source"
+        echo "${LOG_WARN}Not downloading from git, using existing source, if it exists"
         tdd=$dd
+        if [ ! -d $tdd ]; then error_exit "$tdd not found, disable ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT to force reinstallation re-enabling it"; fi
     else
         tdd="$dd-`date +%Y%m%d%H%M%S`"
         mkdir -p $tdd
