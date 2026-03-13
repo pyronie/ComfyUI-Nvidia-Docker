@@ -8,8 +8,7 @@ services:
     volumes:
       # . is relative to /opt/stacks if you installed using Dockge
       - ./userscripts_dir:/userscripts_dir
-      # recommended scripts (only showing the userscripts_dir number, make sure to chmod +x the ones you want to use)
-      # 00, 05, 10, 11, 12, 14, 15, 20, 21 
+      # recommended scripts: 00, 05, 11, 12, 14, 15, 20, 21 (only showing the userscripts_dir number, make sure to chmod +x the ones you want to use)
       - ./run:/comfy/mnt
       - ./basedir:/basedir
 #      - /opt/stacks/comfyui/extra_model_paths.yaml:/extra_model_paths.yaml:ro
