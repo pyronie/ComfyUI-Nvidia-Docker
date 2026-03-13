@@ -1,10 +1,7 @@
-# WiP: it runs without OOM when used in conjunction with extras/dgx_spark-helper.sh but it's not stable
-# ComfyUI still freezes at random location (different nodes at times) when using v8 of https://github.com/mmartial/ComfyUI_misc/tree/main/ComfyUI-Workflows
-#
-# This is using a custom build on the DGX Spark; using: make build-dgx
+# WiP: recommended to run with extras/dgx_spark-helper.sh
 services:
   comfyui-nvidia:
-    image: mmartial/comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx
+    image: mmartial/comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx-latest
     container_name: comfyui-nvidia
     ports:
       - 8188:8188

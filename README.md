@@ -803,7 +803,11 @@ See [extras/FAQ.md] for additional FAQ topics, among which:
 ### 5.7.1. DGX Spark support
 
 The DGX Spark is an ARM64 based GPU, and as such, it requires a different image to be used.
-The base `FROM` is different from x86_64. For the time being, end users will need to build their own image on their DGX Spark.
+The base `FROM` is different from x86_64. 
+
+As of the 20260312 release, a DGX Spark version of the image is available on DockerHub.
+
+To build your own container.
 
 Needed: `git`, `make`, `docker`.
 
@@ -1010,6 +1014,7 @@ For more details, see [this thread on the Unraid forum](https://forums.unraid.ne
 
 # 7. Changelog
 
+- 20260312: Added DGX Spark build and notes on Blackwell nvfp4 usage. Update all images to recent pacakges (unless a new feature is added and a rebuild is required, I likely will do this every couple of months to allow the image to stay up to date with published package fixes).
 - 20260121: Added `TORCH_LOCK` environment variable to manually lock torch components to a specific version
 - 20260110: Fix [Issue 106](https://github.com/mmartial/ComfyUI-Nvidia-Docker/issues/106) + Updating git origin to point to the new repository at [Comfy-Org/ComfyUI](https://github.com/Comfy-Org/ComfyUI)
 - 20260106: (no new release) Added new container for DGX Spark 
