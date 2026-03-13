@@ -802,16 +802,21 @@ See [extras/FAQ.md] for additional FAQ topics, among which:
 
 ### 5.7.1. DGX Spark support
 
-The DGX Spark is an ARM64 based GPU, and as such, it requires a different image to be used.
-The base `FROM` is different from x86_64. 
-
 As of the 20260312 release, a DGX Spark version of the image is available on DockerHub.
 
-To build your own container.
+The DGX Spark is an ARM64 based GPU, and as such, it requires a different image to be used.
+The base `FROM` is different from x86_64. Beside this, the DGX version is not too different from the other versions for `x86_64` and use the same base components to build and run, just a different base image. The main difference is that the DGX version makes use of the `userscripts_dir` folder to install additional components, such as the required "Sage Attention" used in the proposed [compose-dgx_spark.yml](compose-dgx_spark.yml) file.
 
-Needed: `git`, `make`, `docker`.
+Please check [extras/dgx_spark-helper.sh](extras/dgx_spark-helper.sh) and [compose-dgx_spark.yml](compose-dgx_spark.yml) for example usage.
 
-The following commands will build a version of the image using `linux/arm64` as the platform.
+Recommended steps:
+- in the file where you place the `compose-dgx_spark.yml` file (ie renamed as `compose.yaml` for convention in the rest of this explanation), create two folders as the same user ID as the one used to start the container (usually `1000:1000`): `mkdir run basedir`
+- obtain a copy of [userscripts_dir.tar.gz](https://github.com/mmartial/ComfyUI-Nvidia-Docker/blob/main/assets/userscripts_dir.tar.gz) file and uncompressed in the same folder where your `compose.yaml` is. `tar xvfj userscripts_dir.tar.gz` will create the `userscripts_dir` folder owned by `1000:1000` (`chown` accordingly). You will neeed to `chmod +x` files in there. The `compose.yaml` has a list of recommended numbers in the comments, they match the scripts "numbers". Use `chmod +x userscripts_dir/20-SageAttention2.sh` at minimum to allow the `--use-sage-attention` added to the `compose.yaml`. You will see a few other useful scripts there: 00, 05, 10, 11, 12, 15, 21 for example.
+- Once the preliminary setup is completed, `docker compose up` should give you access to ComfyUI on `http://localhost:8188`.
+
+The `compose-dgx_spark.yml` contains a few comments to explain the choices made for the DGX Spark as well as some settings to enable after the first run (like `ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT` to avoid rebuilding onnxruntime from source on every run -- after the initial build).
+
+To build your own container: needed: `git`, `make`, `docker`. The following commands will build a version of the image using `linux/arm64` as the platform.
 
 ```bash
 # Clone the repository
@@ -825,21 +830,7 @@ make build-dgx
 make docker_tag_list
 ```
 
-The local image name will something like `comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`.
-
-Use this value in the `image:` section of the `docker-compose.yml` file; ie it should read: `image: comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`.
-Similaryly, if starting the container with `docker run`, it should read: `docker run ... comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`.
-
-Please check [extras/dgx_spark-helper.sh](extras/dgx_spark-helper.sh) and [compose-dgx_spark.yml](compose-dgx_spark.yml) for example usage.
-
-The DGX version is not too different from the other versions for `x86_64` and use the same base components to build and run. The difference is that it uses the `userscripts_dir` folder to install additional components, such as the required "Sage Attention".
-
-Recommended steps:
-- in the file where you place the `compose-dgx_spark.yml` file (ie renamed as `compose.yaml` for convention in the rest of this explanation), create two folders as the same user ID as the one used to start the container (usually `1000:1000`): `mkdir run basedir`
-- obtain a copy of [userscripts_dir.tar.gz](https://github.com/mmartial/ComfyUI-Nvidia-Docker/blob/main/assets/userscripts_dir.tar.gz) file and uncompressed in the same folder where your `compose.yaml` is. `tar xvfj userscripts_dir.tar.gz` will create the `userscripts_dir` folder owned by `1000:1000` (`chown` accordingly). You will neeed to `chmod +x` files in there. The `compose.yaml` has a list of recommended numbers in the comments, they match the scripts "numbers". Use `chmod +x userscripts_dir/20-SageAttention2.sh` at minimum to allow the `--use-sage-attention` added to the `compose.yaml`. You will see a few other useful scripts there: 00, 05, 10, 11, 12, 15, 21 for example.
-- Once the preliminary setup is completed, `docker compose up` should give you access to ComfyUI on `http://localhost:8188`.
-
-The `compose-dgx_spark.yml` contains a few comments to explain the choices made for the DGX Spark as well as some settings to enable after the first run (like `ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT` to avoid rebuilding onnxruntime from source on every run -- after the initial build).
+The local image name will something like `comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`. Use this value in the `image:` section of the `docker-compose.yml` file; ie it should read: `image: comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`. Similaryly, if starting the container with `docker run`, it should read: `docker run ... comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx`.
 
 ### 5.7.2. Blackwell support
 
