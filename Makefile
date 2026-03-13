@@ -16,7 +16,8 @@ DOCKER_CMD=docker
 DOCKER_PRE="NVIDIA_VISIBLE_DEVICES=all"
 DOCKER_BUILD_ARGS=
 
-COMFYUI_NVIDIA_DOCKER_VERSION=20260121
+COMFYUI_NVIDIA_DOCKER_VERSION=20260312
+
 DEFAULT_PLATFORM=linux/amd64
 DEFAULT_ARCH=x86_64
 DGX_PLATFORM=linux/arm64
@@ -175,6 +176,24 @@ docker_rmi_hub:
 	@for i in ${DOCKERHUB_READY} ${DOCKERHUB_READY_LATEST}; do docker rmi $$i; done
 	@echo ""; echo " ** Remaining images with the build label:"
 	@make docker_tag_list
+
+docker_dgx_push:
+	@for i in ${DOCKER_ALL_DGX}; do \
+		image="${DOCKERHUB_REPO}/${COMFYUI_CONTAINER_NAME}:$$i"; \
+		echo "  ++ $$image"; \
+	done
+	@for i in 5 4 3 2 1; do echo -n "$$i "; sleep 1; done; echo ""
+	@for i in ${DOCKER_ALL_DGX}; do \
+		base="${COMFYUI_CONTAINER_NAME}:$$i"; \
+		target="${DOCKERHUB_REPO}/$$base-${COMFYUI_NVIDIA_DOCKER_VERSION}"; \
+		echo "  ++ $$base -> $$target"; \
+		docker tag $$base $$target; \
+		docker push $$target; \
+		target="${DOCKERHUB_REPO}/$$base-latest"; \
+		echo "  ++ $$base -> $$target"; \
+		docker tag $$base $$target; \
+		docker push $$target; \
+	done
 
 #####
 userscripts:

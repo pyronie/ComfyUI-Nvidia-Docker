@@ -4,7 +4,7 @@
 # This is using a custom build on the DGX Spark; using: make build-dgx
 services:
   comfyui-nvidia:
-    image: comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx
+    image: mmartial/comfyui-nvidia-docker:ubuntu24_cuda13.1-dgx
     container_name: comfyui-nvidia
     ports:
       - 8188:8188
@@ -31,7 +31,7 @@ services:
       SECURITY_LEVEL: weak # adapt as prefered
       COMFY_CMDLINE_EXTRA: --use-sage-attention --bf16-unet --bf16-vae --bf16-text-enc
       # --extra-model-paths-config=/extra_model_paths.yaml
-      # --front-end-version Comfy-Org/ComfyUI_frontend@1.39.2 
+      # --front-end-version Comfy-Org/ComfyUI_frontend@latest 
       # the above is due to https://github.com/Comfy-Org/ComfyUI_frontend/issues/8986
       NVIDIA_VISIBLE_DEVICES: all
       # ^ need video for libnvvcuvid.so
@@ -46,6 +46,10 @@ services:
       # HF
       HF_TOKEN: ${HF_TOKEN} # set your huggingface token to avoid rate limiting in the .env file (do not expose secrets)
       HF_HUB_DISABLE_TELEMETRY: "true"
+    # Using PyTorch recommended settings: removes the limit on locked-in-memory pages for processes in the container + sets the process stack size limit to 64 MiB
+    ulimits:
+      memlock: -1
+      stack: 67108864
     deploy:
       resources:
         reservations:
