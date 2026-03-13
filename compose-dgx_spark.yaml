@@ -35,7 +35,8 @@ services:
       USE_UV: "true"
       # userscripts_dir
       FORCE_REINSTALL: "true"
-      ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT: "true"
+      # this next one should be enabled AFTER onnxruntime was built from source succesfully the first time to avoid it being rebuilt each time 
+      # ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT: "true"
       CUDA_HOME: /usr/local/cuda
       # https://forums.developer.nvidia.com/t/unlocking-the-power-of-the-spark-in-comfyui-no-crashes/360336
       CUDA_CACHE_MAXSIZE: "4294967296" # 4GB kernel cache = 3x rerun speedup

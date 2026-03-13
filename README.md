@@ -832,6 +832,15 @@ Similaryly, if starting the container with `docker run`, it should read: `docker
 
 Please check [extras/dgx_spark-helper.sh](extras/dgx_spark-helper.sh) and [compose-dgx_spark.yml](compose-dgx_spark.yml) for example usage.
 
+The DGX version is not too different from the other versions for `x86_64` and use the same base components to build and run. The difference is that it uses the `userscripts_dir` folder to install additional components, such as the required "Sage Attention".
+
+Recommended steps:
+- in the file where you place the `compose-dgx_spark.yml` file (ie renamed as `compose.yaml` for convention in the rest of this explanation), create two folders as the same user ID as the one used to start the container (usually `1000:1000`): `mkdir run basedir`
+- obtain a copy of [userscripts_dir.tar.gz](https://github.com/mmartial/ComfyUI-Nvidia-Docker/blob/main/assets/userscripts_dir.tar.gz) file and uncompressed in the same folder where your `compose.yaml` is. `tar xvfj userscripts_dir.tar.gz` will create the `userscripts_dir` folder owned by `1000:1000` (`chown` accordingly). You will neeed to `chmod +x` files in there. The `compose.yaml` has a list of recommended numbers in the comments, they match the scripts "numbers". Use `chmod +x userscripts_dir/20-SageAttention2.sh` at minimum to allow the `--use-sage-attention` added to the `compose.yaml`. You will see a few other useful scripts there: 00, 05, 10, 11, 12, 15, 21 for example.
+- Once the preliminary setup is completed, `docker compose up` should give you access to ComfyUI on `http://localhost:8188`.
+
+The `compose-dgx_spark.yml` contains a few comments to explain the choices made for the DGX Spark as well as some settings to enable after the first run (like `ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT` to avoid rebuilding onnxruntime from source on every run -- after the initial build).
+
 ### 5.7.2. Blackwell support
 
 It is recommended to compile SageAttention3 (see [userscripts_dir/21-SageAttention3-BlackwellOnly.sh](userscripts_dir/21-SageAttention3-BlackwellOnly.sh)).
