@@ -146,7 +146,7 @@ if [ "A$must_build" == "Atrue" ]; then
   script -a -e -c $tdd/build.cmd $tdd/build.log || error_exit "Failed to build xformers"
   cd ..
   mv $tdd $dd
-  echo "${LOG_INFO}INFO:${NC} xformers built successfully"
+  echo "${LOG_OK}SUCCESS:${NC} xformers built successfully"
   exit 0
 fi
 
