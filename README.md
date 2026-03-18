@@ -811,7 +811,7 @@ Please check [extras/dgx_spark-helper.sh](extras/dgx_spark-helper.sh) and [compo
 
 Recommended steps:
 - in the file where you place the `compose-dgx_spark.yml` file (ie renamed as `compose.yaml` for convention in the rest of this explanation), create two folders as the same user ID as the one used to start the container (usually `1000:1000`): `mkdir run basedir`
-- obtain a copy of [userscripts_dir.tar.gz](https://github.com/mmartial/ComfyUI-Nvidia-Docker/blob/main/assets/userscripts_dir.tar.gz) file and uncompress it in the same folder where your `compose.yaml` is. `tar xvfj userscripts_dir.tar.gz` will create the `userscripts_dir` folder owned by `1000:1000` (`chown` accordingly). You will neeed to `chmod +x` files in there. The `compose.yaml` has a list of recommended numbers in the comments, they match the scripts "numbers". Use `chmod +x userscripts_dir/20-SageAttention2.sh` at minimum to allow the `--use-sage-attention` added to the `compose.yaml`. You will see a few other useful scripts there: 00, 05, 10, 11, 12, 15, 21 for example.
+- obtain a copy of [userscripts_dir.tar.gz](https://github.com/mmartial/ComfyUI-Nvidia-Docker/blob/main/assets/userscripts_dir.tar.gz) file and uncompress it in the same folder where your `compose.yaml` is. `tar xvfj userscripts_dir.tar.gz` will create the `userscripts_dir` folder owned by `1000:1000` (`chown` accordingly). You will neeed to `chmod +x` files in there. The `compose.yaml` has a list of recommended numbers in the comments, they match the scripts "numbers". Use `chmod +x userscripts_dir/20-SageAttention2.sh` at minimum to allow the `--use-sage-attention` added to the `compose.yaml`. You will see a few other useful scripts there: 00, 05, 11, 12, 15, 21 for example.
 - Once the preliminary setup is completed, look at the content of the `compose.yaml` and adapt to your requirements; in particular the `WANTED_UID` and `WANTED_GID` or other settings as described in the `README.md`.
 - `docker compose up` should give you access to ComfyUI on `http://localhost:8188`.
 
@@ -835,7 +835,7 @@ The local image name will something like `comfyui-nvidia-docker:ubuntu24_cuda13.
 
 ### 5.7.2. Blackwell support
 
-It is recommended to compile SageAttention3 (see [userscripts_dir/21-SageAttention3-BlackwellOnly.sh](userscripts_dir/21-SageAttention3-BlackwellOnly.sh)).
+It is recommended to compile SageAttention2 and SageAttention3 (see [userscripts_dir/21-SageAttention3-BlackwellOnly.sh](userscripts_dir/21-SageAttention3-BlackwellOnly.sh)). For SageAttention2, it is recommended to use the `2-git` version (edit the file [20-SageAttention2.sh](userscripts_dir/20-SageAttention2.sh) and change `sageattention_version` to `2-git`).
 
 If using `nvfp4` models, make sure to install [`comfy_kitchen`](https://github.com/Comfy-Org/comfy-kitchen) as well as the [ComfyUI_Kitchen_nvfp4_Converter](https://github.com/tritant/ComfyUI_Kitchen_nvfp4_Converter) custom node. I have succesfully used it to convert multiple CivitAI `fp16` models to `nvfp4` with no issues.
 
