@@ -121,6 +121,7 @@ If this version is incompatible with your container runtime, please see the list
 | ubuntu24_cuda12.9-latest | | |
 | ubuntu24_cuda13.0-latest | | |
 | ubuntu24_cuda13.1-latest | | a DGX Spark version can be built using `make build-dgx` |
+| ubuntu24_cuda13.2-latest | | |
 
 For more details on driver capabilities and how to update those, please see [Setting up NVIDIA docker & podman (Ubuntu 24.04)](https://www.gkr.one/blg-20240523-u24-nvidia-docker-podman).
 
