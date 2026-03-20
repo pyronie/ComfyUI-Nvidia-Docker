@@ -547,7 +547,9 @@ If the file is not executable, the tool will attempt to make it executable, but 
 
 ⚠️ **WARNING**: This directory is used to run independent user scripts to perform additional operations that might damage your installation. This was added at the request of users trying to install packages from source. **Use with caution**. No support will be provided for issues resulting from the use of this directory. In case of trouble, it is recommended to delete the `run` folder and start a new container.
 
-Scripts (which may not work --please feel free to contribute) provided to demonstrate the capability. None are executable by default. Those scripts were added to enable end users to install components that needed to be built at the time, not yet supported by ComfyUI Manager, or for which no compatible packages were available.
+Scripts (which may not work --please feel free to contribute) provided to add capability to the container. None are executable by default. Those scripts were added to enable end users to install components that needed to be built at the time, not yet supported by ComfyUI Manager, or for which no compatible packages were available.
+
+It is recommended to read at minimum the comments in the header section of each enabled script to understand what it does and how to use it. Some scripts offer to install from known versions or git, you must edit the script to point to the version you want to install.
 
 If a pip version is available, it is recommended to use it instead of the `/userscripts_dir`.
 
