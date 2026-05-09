@@ -17,8 +17,6 @@ services:
 #    extra_hosts:
 #      - ollama.internal:10.12.13.14 # method to add extra hosts to the container for external services (useful for Ollama's node: use http://ollama.internal:11434)
     environment:
-      PREINSTALL_TORCH_CMD: torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu130
-      TORCH_CUDA_ARCH_LIST: "12.1"
       WANTED_UID: "1000"
       WANTED_GID: "1000"
       BASE_DIRECTORY: /basedir

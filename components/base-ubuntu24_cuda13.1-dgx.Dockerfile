@@ -1,4 +1,4 @@
-FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
+FROM nvidia/cuda:13.1.2-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -31,3 +31,5 @@ ARG BASE_DOCKER_FROM=nvidia/cuda:13.1.1-cuddn-devel-ubuntu24.04
 #    ${NV_CUDNN_PACKAGE_DEV_HEADERS} \
 #    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME} \
 #    && apt-get clean
+
+ENV TORCH_CUDA_ARCH_LIST=12.1a
