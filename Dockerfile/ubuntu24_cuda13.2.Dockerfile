@@ -1,4 +1,4 @@
-FROM nvidia/cuda:13.2.0-cudnn-devel-ubuntu24.04
+FROM nvidia/cuda:13.2.1-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -13,7 +13,7 @@ RUN if [ "A${BUILD_APT_PROXY:-}" != "A" ]; then \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-ARG BUILD_ARCH=x86_64
+ARG BUILD_ARCH=x86_64 
 # Install NVIDIA CUDA repo keyring (adds /usr/share/keyrings/cuda-archive-keyring.gpg) and remove duplicate CUDA repo definitions to avoid Signed-By conflicts, then add a single canonical CUDA repo entry using the keyring
 RUN wget -qO /tmp/cuda-keyring.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/${BUILD_ARCH}/cuda-keyring_1.1-1_all.deb \
     && dpkg -i /tmp/cuda-keyring.deb \
@@ -24,7 +24,7 @@ RUN wget -qO /tmp/cuda-keyring.deb https://developer.download.nvidia.com/compute
     && apt-get update \
     && apt-get clean
 
-ARG BASE_DOCKER_FROM=nvidia/cuda:13.2.0-cudnn-devel-ubuntu24.04
+ARG BASE_DOCKER_FROM=nvidia/cuda:13.2.1-cudnn-devel-ubuntu24.04
 ##### Base
 
 # Install system packages
@@ -103,11 +103,11 @@ COPY --chmod=555 config.sh /comfyui-nvidia_config.sh
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Create a new group for the comfy and comfytoo users
-RUN groupadd -g 1024 comfy \
+RUN groupadd -g 1024 comfy \ 
     && groupadd -g 1025 comfytoo
 
-# The comfy (resp. comfytoo) user will have UID 1024 (resp. 1025),
-# be part of the comfy (resp. comfytoo) and users groups and be sudo capable (passwordless)
+# The comfy (resp. comfytoo) user will have UID 1024 (resp. 1025), 
+# be part of the comfy (resp. comfytoo) and users groups and be sudo capable (passwordless) 
 RUN useradd -u 1024 -d /home/comfy -g comfy -s /bin/bash -m comfy \
     && usermod -G users comfy \
     && adduser comfy sudo
