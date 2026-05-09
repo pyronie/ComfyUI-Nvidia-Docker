@@ -116,12 +116,12 @@ If this version is incompatible with your container runtime, please see the list
 | ubuntu22_cuda12.3-latest | | Ubuntu 22 based image, to be depreacted in 2026 | 
 | ubuntu22_cuda12.4-latest | | Ubuntu 22 based image, to be depreacted in 2026 | 
 | ubuntu24_cuda12.5-latest | | was `latest` up to `20250320` release |
-| ubuntu24_cuda12.6-latest | `latest` | `latest` as of `20250413` release |
-| ubuntu24_cuda12.8-latest | | minimum required for Blackwell (inc RTX 50xx) hardware (see "Blackwell support" section) |
+| ubuntu24_cuda12.6-latest | | was `latest` up of `20260509` release |
+| ubuntu24_cuda12.8-latest | `latest` as of `20260509` release | minimum required for Blackwell (inc RTX 50xx) hardware (see "Blackwell support" section) |
 | ubuntu24_cuda12.9-latest | | |
 | ubuntu24_cuda13.0-latest | | |
-| ubuntu24_cuda13.1-latest | | a DGX Spark version can be built using `make build-dgx` |
-| ubuntu24_cuda13.2-latest | | awaiting `cu132` support in PyTorch for next release |
+| ubuntu24_cuda13.1-latest | | |
+| ubuntu24_cuda13.2-latest | | |
 
 For more details on driver capabilities and how to update those, please see [Setting up NVIDIA docker & podman (Ubuntu 24.04)](https://www.gkr.one/blg-20240523-u24-nvidia-docker-podman).
 
@@ -1018,6 +1018,7 @@ For more details, see [this thread on the Unraid forum](https://forums.unraid.ne
 
 # 7. Changelog
 
+- 20260509: As announced previously, updated `latest` to CUDA 12.8 release. No new features: maintenance release + updated CUDA 13.0. 13.1 and 13.2 versions.
 - 20260312: Added DGX Spark build and notes on Blackwell nvfp4 usage. Update all images to recent pacakges (unless a new feature is added and a rebuild is required, I likely will do this every couple of months to allow the image to stay up to date with published package fixes).
 - 20260121: Added `TORCH_LOCK` environment variable to manually lock torch components to a specific version
 - 20260110: Fix [Issue 106](https://github.com/mmartial/ComfyUI-Nvidia-Docker/issues/106) + Updating git origin to point to the new repository at [Comfy-Org/ComfyUI](https://github.com/Comfy-Org/ComfyUI)
