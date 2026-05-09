@@ -124,6 +124,12 @@ if [ "A$must_build" == "Atrue" ]; then
 
     echo "CUDA version: $CUDA_VERSION"
 
+    # until this is fixed, the build will not work on 13.2 
+    if [ "$CUDA_VERSION" == "cuda13.2" ]; then
+        echo "onnxruntime-gpu build is not currently working with CUDA 13.2. For more details see https://github.com/microsoft/onnxruntime/issues/28023 (when this is marked as fixed, please let me know so I can update the script)"
+        exit 0
+    fi
+
     if pip3 show torch &>/dev/null; then
         torch_version=$(pip3 show torch | grep Version | awk '{print $2}' | cut -d'.' -f1-2)
     else
@@ -175,13 +181,19 @@ find . -type f -name 'CMakeCache.txt' -delete
 ./build.sh \
     --config Release \
     --build_shared_lib \
-    --parallel \
+    --parallel 4 \
+    --nvcc_threads 1 \
     --use_cuda \
     --cuda_home /usr/local/cuda \
     --cudnn_home /usr \
-    --cmake_extra_defines CMAKE_CUDA_ARCHITECTURES=121 \
-    "CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu" \
-    "CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so" \
+    --cmake_extra_defines \
+      "CMAKE_CUDA_ARCHITECTURES=121" \
+      "CMAKE_CUDA_FLAGS=-Xcompiler -fpermissive" \
+      "CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu" \
+      "CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so" \
+      "onnxruntime_BUILD_UNIT_TESTS=OFF" \
+    --cmake_generator Ninja  \
+    --use_binskim_compliant_compile_flags  \
     --build_wheel \
     --skip_tests
 

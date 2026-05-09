@@ -3,9 +3,11 @@
 # Pre-requisites (run first):
 # - 00-nvidiaDev.sh
 
+BLACKWELL_CHECK=$(nvidia-smi --query-gpu=name --format=csv,noheader | grep -qiE "B100|B200|GB200|GB10|RTX 50|Blackwell" && echo "Blackwell" || echo "NOT")
+if [ "$BLACKWELL_CHECK" == "NOT" ]; then echo "Blackwell not detected (maybe the hardware version is not recognized by the script), cannot install sageattn3"; exit 0; fi
+
 # https://github.com/thu-ml/SageAttention
 sageattention_version="3-git"
-# To Install from git, uncomment the line above (this will create a folder called SageAttention-3-git)
 
 # --- CONFIGURATION ---
 FORCE_REINSTALL="${FORCE_REINSTALL:-false}"

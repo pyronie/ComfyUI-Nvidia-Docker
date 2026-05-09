@@ -17,8 +17,6 @@ services:
 #    extra_hosts:
 #      - ollama.internal:10.12.13.14 # method to add extra hosts to the container for external services (useful for Ollama's node: use http://ollama.internal:11434)
     environment:
-      PREINSTALL_TORCH_CMD: torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu130
-      TORCH_CUDA_ARCH_LIST: "12.1"
       WANTED_UID: "1000"
       WANTED_GID: "1000"
       BASE_DIRECTORY: /basedir
@@ -27,14 +25,12 @@ services:
       SECURITY_LEVEL: weak # adapt as prefered
       COMFY_CMDLINE_EXTRA: --use-sage-attention --bf16-unet --bf16-vae --bf16-text-enc
       # --extra-model-paths-config=/extra_model_paths.yaml
-      # --front-end-version Comfy-Org/ComfyUI_frontend@latest 
-      # the above is due to https://github.com/Comfy-Org/ComfyUI_frontend/issues/8986
       NVIDIA_VISIBLE_DEVICES: all
       # ^ need video for libnvvcuvid.so
       USE_UV: "true"
       # userscripts_dir
       FORCE_REINSTALL: "true"
-      # this next one should be enabled AFTER onnxruntime was built from source succesfully the first time to avoid it being rebuilt each time 
+      # this next one should be enabled AFTER onnxruntime was built from source succesfully the first time (also if you change the CUDA version)to avoid it being rebuilt each time 
       # ONNXRUNTIME_DO_NOT_DELETE_GPU_IF_PRESENT: "true"
       CUDA_HOME: /usr/local/cuda
       # https://forums.developer.nvidia.com/t/unlocking-the-power-of-the-spark-in-comfyui-no-crashes/360336

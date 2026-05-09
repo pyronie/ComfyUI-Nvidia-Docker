@@ -1,4 +1,4 @@
-FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
+FROM nvidia/cuda:13.1.2-cudnn-devel-ubuntu24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -13,7 +13,7 @@ RUN if [ "A${BUILD_APT_PROXY:-}" != "A" ]; then \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-ARG BASE_DOCKER_FROM=nvidia/cuda:13.1.1-cuddn-devel-ubuntu24.04
+ARG BASE_DOCKER_FROM=nvidia/cuda:13.1.2-cudnn-devel-ubuntu24.04
 
 # extended from https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/13.1.1/ubuntu2404/devel/cudnn/Dockerfile
 # using https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/sbsa/ (Arm Server Base System Architecture)
@@ -31,3 +31,5 @@ ARG BASE_DOCKER_FROM=nvidia/cuda:13.1.1-cuddn-devel-ubuntu24.04
 #    ${NV_CUDNN_PACKAGE_DEV_HEADERS} \
 #    && apt-mark hold ${NV_CUDNN_PACKAGE_NAME} \
 #    && apt-get clean
+
+ENV TORCH_CUDA_ARCH_LIST=12.1a
