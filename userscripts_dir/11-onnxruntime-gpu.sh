@@ -179,9 +179,11 @@ find . -type f -name 'CMakeCache.txt' -delete
     --use_cuda \
     --cuda_home /usr/local/cuda \
     --cudnn_home /usr \
-    --cmake_extra_defines CMAKE_CUDA_ARCHITECTURES=121 \
-    "CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu" \
-    "CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so" \
+    --cmake_extra_defines \
+      "CMAKE_CUDA_ARCHITECTURES=121" \
+      "CMAKE_CUDA_FLAGS=-Xcompiler -fpermissive" \
+      "CUDNN_INCLUDE_DIR=/usr/include/aarch64-linux-gnu" \
+      "CUDNN_LIBRARY=/usr/lib/aarch64-linux-gnu/libcudnn.so" \
     --build_wheel \
     --skip_tests
 
