@@ -32,13 +32,23 @@ DOCKERFILE_DIR=Dockerfile
 DOCKER_ALL=$(shell ls -1 ${COMPONENTS_DIR}/base-* | perl -pe 's%^.+/base-%%' | perl -pe 's%\.Dockerfile%%' | grep -v dgx | sort)
 DOCKER_ALL_DGX=$(shell ls -1 ${COMPONENTS_DIR}/base-* | perl -pe 's%^.+/base-%%' | perl -pe 's%\.Dockerfile%%' | grep dgx | sort)
 
+CURRENT_ARCH=$(shell uname -m)
+
 all:
 	@if [ `echo ${DOCKER_ALL} | wc -w` -eq 0 ]; then echo "No images candidates to build"; exit 1; fi
 	@echo "Available ${COMFYUI_CONTAINER_NAME} ${DOCKER_CMD} images to be built (make targets):"
+	
+	@if [ "A${CURRENT_ARCH}" = "Aaarch64" ]; then make all_dgx; else make all_x86; fi
+
+all_x86:
 	@echo -n "      "; echo ${DOCKER_ALL} | sed -e 's/ /\n      /g'
 	@echo ""
 	@echo "build:          builds all"
-	@echo "build-dgx:      builds for DGX Spark: ${DOCKER_ALL_DGX}"
+
+all_dgx:
+	@echo -n "      "; echo ${DOCKER_ALL_DGX} | sed -e 's/ /\n      /g'
+	@echo ""
+	@echo "build-dgx:      builds for DGX Spark"
 
 build: ${DOCKER_ALL}
 
