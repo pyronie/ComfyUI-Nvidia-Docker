@@ -126,7 +126,7 @@ if [ "A$must_build" == "Atrue" ]; then
 
     # until this is fixed, the build will not work on 13.2 
     if [ "$CUDA_VERSION" == "cuda13.2" ]; then
-        echo "onnxruntime-gpu build is not currently working with CUDA 13.2. For more details see https://github.com/microsoft/onnxruntime/issues/28023 (if this marked as fixed, please let me know so I can update the script)"
+        echo "onnxruntime-gpu build is not currently working with CUDA 13.2. For more details see https://github.com/microsoft/onnxruntime/issues/28023 (when this is marked as fixed, please let me know so I can update the script)"
         exit 0
     fi
 
