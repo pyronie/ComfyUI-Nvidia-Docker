@@ -72,7 +72,10 @@ RUN apt-get update -y --fix-missing \
     libxext6 \
     libxrender1 \
     xdg-utils \
+    ffmpeg \
+
   && apt-get clean
+RUN pip install sageattention==1.0.6 --no-build-isolation --break-system-packages
 
 # Add libEGL ICD loaders and libraries + Vulkan ICD loaders and libraries
 # Per https://github.com/mmartial/ComfyUI-Nvidia-Docker/issues/26
